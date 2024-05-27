@@ -22,7 +22,9 @@ defmodule PtahClient do
 
   @impl Slipstream
   def handle_connect(socket) do
-    sys_info = DockerClient.get_version()
+    {:ok, sys_info} = DockerClient.get_version()
+
+    {:ok, swarm} = get_swarm()
 
     Logger.debug(
       "Connected to docker host, platform: #{inspect(sys_info["Platform"]["Name"])}, version: #{inspect(sys_info["Version"])}"
@@ -33,7 +35,9 @@ defmodule PtahClient do
     {:ok,
      join(socket, @topic, %{
        token: socket.assigns[:token],
-       docker: %{platform: sys_info["Platform"]["Name"], version: sys_info["Version"]}
+       agent: %{version: "0.0.0"},
+       docker: %{platform: sys_info["Platform"]["Name"], version: sys_info["Version"]},
+       swarm: swarm
      })}
   end
 
@@ -53,8 +57,31 @@ defmodule PtahClient do
 
   @impl Slipstream
   def handle_info(:ping, socket) do
-    {:ok, _ref} = push(socket, @topic, "ping", %{"ping" => "pong"})
+    # Disable ping for now
+    # {:ok, _ref} = push(socket, @topic, "ping", %{"ping" => "pong"})
 
     {:noreply, socket}
+  end
+
+  @impl Slipstream
+  def handle_message(_topic, "swarm:create", _payload, socket) do
+    Logger.debug("CREATE NEW SWARM")
+
+    {:ok, socket}
+  end
+
+  @impl Slipstream
+  def handle_message(topic, event, message, socket) do
+    Logger.debug("Unhandled message: #{inspect({topic, event, message})}")
+
+    {:noreply, socket}
+  end
+
+  def get_swarm() do
+    case DockerClient.get_swarm() do
+      {:ok, swarm} -> {:ok, swarm}
+      {:error, :not_swarm_manager, _res} -> {:ok, nil}
+      {:error, other, _res} -> {:error, other, %{}}
+    end
   end
 end

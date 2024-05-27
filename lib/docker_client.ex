@@ -1,7 +1,10 @@
 defmodule DockerClient do
   use GenServer
 
+  use DockerClient.Swarm
   use DockerClient.System
+
+  require Logger
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -32,9 +35,19 @@ defmodule DockerClient do
   def handle_call(%{method: "GET"} = request, _from, state) do
     socket_path = URI.encode_www_form("/var/run/docker.sock")
 
-    {:ok, %{body: body}} =
+    {:ok, %{status: status, body: body}} =
       Tesla.get(state, "http+unix://#{socket_path}#{request.url}")
 
-    {:reply, body, state}
+    result =
+      case status do
+        200 -> {:ok, body}
+        other -> {:error, map_status_to_error(other, request), body}
+      end
+
+    {:reply, result, state}
+  end
+
+  defp map_status_to_error(status, request) do
+    Map.get(request.status_map, status, :unknown_error)
   end
 end
