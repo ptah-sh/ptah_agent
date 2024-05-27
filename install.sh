@@ -79,7 +79,7 @@ GROUP="ptah"
 # No worries, this is a token from localhost
 # TODO: extract PTAH_TOKEN and PTAH_HOST from env variables
 PTAH_TOKEN="SFMyNTY.g2gDYQ5uBgDhPHyijwFiAAFRgA.dr91FMV57KWmbWVR99jCMSFgMCj7H6-q8cy6b8pE3Kc"
-PTAH_HOST="ws://4.tcp.eu.ngrok.io:17200/sockets/agent/websocket"
+PTAH_HOST="ws://ptah.a.pinggy.link:22967/sockets/agent/websocket"
 
 echo "User: $USER:$GROUP"
 
@@ -156,7 +156,7 @@ BASHRC
 
 curl -L https://ess-gg-assets-bohdan-shulha.nyc3.digitaloceanspaces.com/ptah/ptah_agent_latest_linux_x86_64.tar.xz -o /tmp/ptah_agent_latest.tar.xz
 
-tar -xvJf /tmp/ptah_agent_latest.tar.xz -C \$HOME/ptah_agent
+tar -xvJf /tmp/ptah_agent_latest.tar.xz -C \$HOME/
 
 EOF
 
