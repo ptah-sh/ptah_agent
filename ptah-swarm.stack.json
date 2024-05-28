@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ptah.sh/marketplace/schemas/stack-0.0.1.json",
+
+  "version": "0.1.0",
+  "name": "ptah-swarm",
+  "description": "",
+  "author": "Bohdan Shulha <b.shulha@pm.me>",
+  "homepage": "https://ptah.sh",
+  "license": "MIT",
+  "services": {
+    "caddy": {
+      "description": "The reverse proxy that powers Ptah Swarm cluster.",
+      "image": "caddy:latest",
+      "ports": {
+        "http": {
+          "target": 80,
+          "description": "Caddy HTTP port"
+        },
+        "https": {
+          "target": 443,
+          "description": "Caddy HTTPS port"
+        }
+      },
+      "volumes": {
+        "data": {
+          "target": "/data",
+          "description": "Caddy data directory. Should not be treated as a cache."
+        },
+        "config": {
+          "target": "/config",
+          "description": "Caddy config directory."
+        }
+      }
+    }
+  }
+}

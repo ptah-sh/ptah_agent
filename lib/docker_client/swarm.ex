@@ -5,7 +5,7 @@ defmodule DockerClient.Swarm do
         GenServer.call(__MODULE__, %{
           method: "GET",
           url: "/swarm",
-          status_map: %{503 => :not_swarm_manager}
+          status_map: %{503 => :not_swarm_node}
         })
       end
 

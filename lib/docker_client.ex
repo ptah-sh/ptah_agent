@@ -1,6 +1,8 @@
 defmodule DockerClient do
   use GenServer
 
+  use DockerClient.Networks
+  use DockerClient.Services
   use DockerClient.Swarm
   use DockerClient.System
 
@@ -56,7 +58,7 @@ defmodule DockerClient do
 
     result =
       case status do
-        200 -> {:ok, body}
+        _ when status in [200, 201] -> {:ok, body}
         other -> {:error, map_status_to_error(other, request), body}
       end
 
@@ -64,6 +66,14 @@ defmodule DockerClient do
   end
 
   defp map_status_to_error(status, request) do
-    Map.get(request.status_map, status, :unknown_error)
+    status_map =
+      Map.merge(
+        %{
+          400 => :bad_request
+        },
+        request.status_map
+      )
+
+    Map.get(status_map, status, :unknown_error)
   end
 end

@@ -64,10 +64,37 @@ defmodule PtahClient do
   end
 
   @impl Slipstream
-  def handle_message(_topic, "swarm:create", _payload, socket) do
+  def handle_message(_topic, "swarm:create", payload, socket) do
     {:ok, swarm_id} = DockerClient.post_swarm_init()
 
-    push(socket, @topic, "swarm:create", %{"swarm_id" => swarm_id})
+    {:ok, _} =
+      DockerClient.post_networks_create(%{
+        name: "ptah-net",
+        attachable: true,
+        scope: "swarm",
+        driver: "overlay"
+      })
+
+    # TODO: label current node as caddy data host
+    # TODO: install Caddy stack here
+
+    push(socket, @topic, "swarm:created", %{
+      meta: %{
+        swarm_id: payload["meta"]["swarm_id"]
+      },
+      data: %{
+        swarm_id: swarm_id
+      }
+    })
+
+    {:ok, socket}
+  end
+
+  @impl Slipstream
+  def handle_message(_topic, "stack:create", stack_template, socket) do
+    for %{name: name, template: template} <- stack_template["services"] do
+      {:ok} = DockerClient.post_services_create(Map.merge(template, %{name: name}))
+    end
 
     {:ok, socket}
   end
@@ -82,8 +109,32 @@ defmodule PtahClient do
   def get_swarm() do
     case DockerClient.get_swarm() do
       {:ok, swarm} -> {:ok, swarm}
-      {:error, :not_swarm_manager, _res} -> {:ok, nil}
+      {:error, :not_swarm_node, _res} -> {:ok, nil}
       {:error, other, _res} -> {:error, other, %{}}
     end
   end
+
+  # def try_stack_create() do
+  #   DockerClient.post_services_create(%{
+  #     name: "test-stack",
+  #     task_template: %{
+  #       container_spec: %{
+  #         name: "nginx",
+  #         image: "nginx:latest"
+  #       },
+  #       networks: [%{target: "ptah-net"}]
+  #     },
+  #     mode: %{replicated: %{replicas: 3}},
+  #     endpoint_spec: %{
+  #       ports: %{
+  #         "web" => %{
+  #           protocol: "tcp",
+  #           target_port: 80,
+  #           published_port: 80,
+  #           published_mode: "ingress"
+  #         }
+  #       }
+  #     }
+  #   })
+  # end
 end
