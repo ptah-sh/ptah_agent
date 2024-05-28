@@ -8,6 +8,17 @@ defmodule DockerClient.Swarm do
           status_map: %{503 => :not_swarm_manager}
         })
       end
+
+      def post_swarm_init() do
+        GenServer.call(__MODULE__, %{
+          method: "POST",
+          url: "/swarm/init",
+          body: %{
+            ListenAddr: "0.0.0.0:2375"
+          },
+          status_map: %{}
+        })
+      end
     end
   end
 

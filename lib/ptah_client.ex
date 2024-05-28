@@ -65,7 +65,9 @@ defmodule PtahClient do
 
   @impl Slipstream
   def handle_message(_topic, "swarm:create", _payload, socket) do
-    Logger.debug("CREATE NEW SWARM")
+    {:ok, swarm_id} = DockerClient.post_swarm_init()
+
+    push(socket, @topic, "swarm:create", %{"swarm_id" => swarm_id})
 
     {:ok, socket}
   end
