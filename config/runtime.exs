@@ -7,5 +7,5 @@ config :ptah_agent, :ptah,
   token:
     System.get_env(
       "PTAH_TOKEN",
-      "SFMyNTY.g2gDYQFuBgCIpIjOjwFiAAFRgA.r1_XeWf2DU_xWM7dIaF_KSfs2nCEqVK10oc-ZvG4EmE"
+      "SFMyNTY.g2gDYQFuBgCx9-vQjwFiAAFRgA.9dhsw4-3Sfuu8s4TngTwb-TyWBWGaw3yyQfoWCpxhaU"
     )

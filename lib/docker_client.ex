@@ -2,6 +2,7 @@ defmodule DockerClient do
   use GenServer
 
   use DockerClient.Networks
+  use DockerClient.Nodes
   use DockerClient.Services
   use DockerClient.Swarm
   use DockerClient.System

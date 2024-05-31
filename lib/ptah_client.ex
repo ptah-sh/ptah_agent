@@ -37,10 +37,13 @@ defmodule PtahClient do
     Logger.debug("Connected to host, joining with token: #{socket.assigns[:token]}")
 
     {:ok,
-     join(socket, @topic, %{
+     push(socket, %Cmd.Join{
        token: socket.assigns[:token],
-       agent: %{version: "0.0.0"},
-       docker: %{platform: sys_info["Platform"]["Name"], version: sys_info["Version"]},
+       agent: %Cmd.Join.Agent{version: "0.0.0"},
+       docker: %Cmd.Join.Docker{
+         platform: sys_info["Platform"]["Name"],
+         version: sys_info["Version"]
+       },
        swarm: swarm
      })}
   end
@@ -80,13 +83,17 @@ defmodule PtahClient do
         driver: "overlay"
       })
 
+    {:ok, info} = DockerClient.get_info()
+
     # TODO: label current node as caddy data host
     # TODO: install Caddy stack here
 
+    # TODO: rename SwarmCreated into "swarm updated"?
     push(socket, %Event.SwarmCreated{
       swarm_id: packet.swarm_id,
       docker: %Event.SwarmCreated.Docker{
-        swarm_id: swarm_id
+        swarm_id: swarm_id,
+        node_id: info["Swarm"]["NodeID"]
       }
     })
 
@@ -110,35 +117,18 @@ defmodule PtahClient do
   end
 
   def get_swarm() do
-    case DockerClient.get_swarm() do
-      {:ok, swarm} -> {:ok, swarm}
-      {:error, :not_swarm_node, _res} -> {:ok, nil}
-      {:error, other, _res} -> {:error, other, %{}}
+    {:ok, info} = DockerClient.get_info()
+
+    case info["Swarm"]["LocalNodeState"] do
+      "active" ->
+        {:ok,
+         %Cmd.Join.Swarm{
+           swarm_id: info["Swarm"]["Cluster"]["ID"],
+           node_id: info["Swarm"]["NodeID"]
+         }}
+
+      _ ->
+        {:ok, nil}
     end
   end
-
-  # def try_service_create() do
-  #   DockerClient.post_services_create(%{
-  #     service_name: "test-service",
-  #     stack_name: "test-stack",
-  #     task_template: %{
-  #       container_spec: %{
-  #         name: "nginx",
-  #         image: "nginx:latest"
-  #       },
-  #       networks: [%{target: "ptah-net"}]
-  #     },
-  #     mode: %{replicated: %{replicas: 3}},
-  #     endpoint_spec: %{
-  #       ports: [
-  #         %{
-  #           protocol: "tcp",
-  #           target_port: 80,
-  #           published_port: 80,
-  #           published_mode: "ingress"
-  #         }
-  #       ]
-  #     }
-  #   })
-  # end
 end
