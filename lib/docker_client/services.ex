@@ -2,8 +2,6 @@ defmodule DockerClient.Services do
   defp endpoints do
     quote do
       def post_services_create(spec) do
-        %{task_template: task_template, endpoint_spec: endpoint_spec} = spec
-
         GenServer.call(__MODULE__, %{
           method: "POST",
           url: "/services/create",
@@ -11,20 +9,22 @@ defmodule DockerClient.Services do
             Name: spec.name,
             TaskTemplate: %{
               ContainerSpec: %{
-                Image: task_template.container_spec.image,
-                Hostname: "#{task_template.container_spec.name}.#{spec.name}"
+                Image: spec.task_template.container_spec.image,
+                Hostname: spec.task_template.container_spec.hostname
               },
               Networks:
-                Enum.map(task_template.networks, fn network -> %{Target: network.target} end)
+                Enum.map(spec.task_template.networks, fn network ->
+                  %{Target: network.target, Aliases: network.aliases}
+                end)
             },
             Mode: %{
               Replicated: %{
-                Replicas: 3
+                Replicas: spec.mode.replicated.replicas
               }
             },
             EndpointSpec: %{
               Ports:
-                Enum.map(endpoint_spec.ports, fn {_name, port} ->
+                Enum.map(spec.endpoint_spec.ports, fn port ->
                   %{
                     Protocol: port.protocol,
                     TargetPort: port.target_port,

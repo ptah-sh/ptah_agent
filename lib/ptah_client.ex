@@ -6,6 +6,10 @@ defmodule PtahClient do
 
   @topic "agent:daemon"
 
+  use PtahProto, slipstream_topic: @topic
+  alias PtahProto.Event
+  alias PtahProto.Cmd
+
   def start_link(opts) do
     Slipstream.start_link(__MODULE__, opts, name: __MODULE__)
   end
@@ -63,8 +67,9 @@ defmodule PtahClient do
     {:noreply, socket}
   end
 
-  @impl Slipstream
-  def handle_message(_topic, "swarm:create", payload, socket) do
+  @impl PtahProto
+  def handle_packet(%Cmd.CreateSwarm{} = packet, socket) do
+    # FIXME: this is not a swarm_id, this is the complete description of the swarm.
     {:ok, swarm_id} = DockerClient.post_swarm_init()
 
     {:ok, _} =
@@ -78,30 +83,28 @@ defmodule PtahClient do
     # TODO: label current node as caddy data host
     # TODO: install Caddy stack here
 
-    push(socket, @topic, "swarm:created", %{
-      meta: %{
-        swarm_id: payload["meta"]["swarm_id"]
-      },
-      data: %{
+    push(socket, %Event.SwarmCreated{
+      swarm_id: packet.swarm_id,
+      docker: %Event.SwarmCreated.Docker{
         swarm_id: swarm_id
       }
     })
 
-    {:ok, socket}
+    {:noreply, socket}
   end
 
-  @impl Slipstream
-  def handle_message(_topic, "stack:create", stack_template, socket) do
-    for %{name: name, template: template} <- stack_template["services"] do
-      {:ok} = DockerClient.post_services_create(Map.merge(template, %{name: name}))
+  @impl PtahProto
+  def handle_packet(%Cmd.CreateStack{} = packet, socket) do
+    for service <- packet.services do
+      {:ok, body} = DockerClient.post_services_create(service.service_spec)
+
+      push(socket, %Event.ServiceCreated{
+        service_id: service.service_id,
+        docker: %{
+          service_id: body["ID"]
+        }
+      })
     end
-
-    {:ok, socket}
-  end
-
-  @impl Slipstream
-  def handle_message(topic, event, message, socket) do
-    Logger.debug("Unhandled message: #{inspect({topic, event, message})}")
 
     {:noreply, socket}
   end
@@ -114,9 +117,10 @@ defmodule PtahClient do
     end
   end
 
-  # def try_stack_create() do
+  # def try_service_create() do
   #   DockerClient.post_services_create(%{
-  #     name: "test-stack",
+  #     service_name: "test-service",
+  #     stack_name: "test-stack",
   #     task_template: %{
   #       container_spec: %{
   #         name: "nginx",
@@ -126,14 +130,14 @@ defmodule PtahClient do
   #     },
   #     mode: %{replicated: %{replicas: 3}},
   #     endpoint_spec: %{
-  #       ports: %{
-  #         "web" => %{
+  #       ports: [
+  #         %{
   #           protocol: "tcp",
   #           target_port: 80,
   #           published_port: 80,
   #           published_mode: "ingress"
   #         }
-  #       }
+  #       ]
   #     }
   #   })
   # end

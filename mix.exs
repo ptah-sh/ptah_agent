@@ -35,7 +35,9 @@ defmodule PtahAgent.MixProject do
       # hackney for tesla
       {:hackney, "~> 1.17"},
       # jason for tesla
-      {:jason, ">= 1.0.0"}
+      {:jason, ">= 1.0.0"},
+      # ptah_proto for ptah. :)
+      {:ptah_proto, git: "https://gitlab.com/ptah-sh/ptah_proto.git", branch: "main"}
     ]
   end
 end
