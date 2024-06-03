@@ -10,7 +10,21 @@ defmodule DockerClient.Services do
             TaskTemplate: %{
               ContainerSpec: %{
                 Image: spec.task_template.container_spec.image,
-                Hostname: spec.task_template.container_spec.hostname
+                Hostname: spec.task_template.container_spec.hostname,
+                Mounts:
+                  Enum.map(spec.task_template.container_spec.mounts, fn mount ->
+                    %{
+                      Target: mount.target,
+                      Source: mount.source,
+                      Type: mount.type,
+                      BindOptions: %{
+                        CreateMountpoint: mount.bind_options.create_mountpoint
+                      }
+                    }
+                  end)
+              },
+              Placement: %{
+                Constraints: spec.task_template.placement.constraints
               },
               Networks:
                 Enum.map(spec.task_template.networks, fn network ->

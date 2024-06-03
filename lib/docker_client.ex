@@ -38,8 +38,12 @@ defmodule DockerClient do
   def handle_call(%{method: "GET"} = request, _from, state) do
     socket_path = URI.encode_www_form("/var/run/docker.sock")
 
+    Logger.debug("DOCKER REQUEST: #{inspect(request)}")
+
     {:ok, %{status: status, body: body}} =
       Tesla.get(state, "http+unix://#{socket_path}#{request.url}")
+
+    Logger.debug("DOCKER RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
 
     result =
       case status do
@@ -54,8 +58,12 @@ defmodule DockerClient do
   def handle_call(%{method: "POST"} = request, _from, state) do
     socket_path = URI.encode_www_form("/var/run/docker.sock")
 
+    Logger.debug("DOCKER REQUEST: #{inspect(request)}")
+
     {:ok, %{status: status, body: body}} =
       Tesla.post(state, "http+unix://#{socket_path}#{request.url}", request.body)
+
+    Logger.debug("DOCKER RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
 
     result =
       case status do

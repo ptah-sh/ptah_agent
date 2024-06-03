@@ -17,11 +17,14 @@ defmodule PtahClient do
   @impl Slipstream
   def init(init_args) do
     host = Keyword.fetch!(init_args, :host)
+    mounts_root = Keyword.fetch!(init_args, :mounts_root)
     token = Keyword.fetch!(init_args, :token)
 
-    Logger.debug("Connecting to #{host}")
+    Logger.debug("Connecting to #{host}.")
+    Logger.debug("Mounts root: #{mounts_root}.")
 
-    {:ok, assign(connect!(uri: host), :token, token), {:continue, :start_ping}}
+    {:ok, assign(connect!(uri: host), token: token, mounts_root: mounts_root),
+     {:continue, :start_ping}}
   end
 
   @impl Slipstream
@@ -40,6 +43,7 @@ defmodule PtahClient do
      push(socket, %Cmd.Join{
        token: socket.assigns[:token],
        agent: %Cmd.Join.Agent{version: "0.0.0"},
+       mounts_root: socket.assigns[:mounts_root],
        docker: %Cmd.Join.Docker{
          platform: sys_info["Platform"]["Name"],
          version: sys_info["Version"]
@@ -88,7 +92,7 @@ defmodule PtahClient do
     # TODO: label current node as caddy data host
     # TODO: install Caddy stack here
 
-    # TODO: rename SwarmCreated into "swarm updated"?
+    # TODO: rename SwarmCreated into "swarm updated" so it can be reused on join and swarm creation?
     push(socket, %Event.SwarmCreated{
       swarm_id: packet.swarm_id,
       docker: %Event.SwarmCreated.Docker{
@@ -104,6 +108,11 @@ defmodule PtahClient do
   def handle_packet(%Cmd.CreateStack{} = packet, socket) do
     for service <- packet.services do
       {:ok, body} = DockerClient.post_services_create(service.service_spec)
+
+      # Creating mounts manually as Docker Desktop doesn't create ones even with CreateMountpoint bind option.
+      for mount <- service.service_spec.task_template.container_spec.mounts do
+        :ok = File.mkdir_p(mount.source)
+      end
 
       push(socket, %Event.ServiceCreated{
         service_id: service.service_id,
