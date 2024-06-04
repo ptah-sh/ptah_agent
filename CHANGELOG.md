@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/ptah-sh/ptah_agent/compare/v1.1.0...v1.1.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) path typos ([0bd3aa0](https://github.com/ptah-sh/ptah_agent/commit/0bd3aa0e39a7993e6a85c7cede614d3c291065e4))
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) path typos 2 ([6879ba2](https://github.com/ptah-sh/ptah_agent/commit/6879ba26ba169daf14d5b2f587e94a23d22eb126))
+
 ## [1.1.0](https://github.com/ptah-sh/ptah_agent/compare/v1.0.7...v1.1.0) (2024-06-04)
 
 
