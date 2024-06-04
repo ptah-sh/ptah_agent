@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/ptah-sh/ptah_agent/compare/v1.1.2...v1.1.3) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) symlinks ([bbe70f2](https://github.com/ptah-sh/ptah_agent/commit/bbe70f282cb42ef783fc844b1bf122a1e4e062d3))
+
 ## [1.1.2](https://github.com/ptah-sh/ptah_agent/compare/v1.1.1...v1.1.2) (2024-06-04)
 
 
