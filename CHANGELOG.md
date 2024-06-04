@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/ptah-sh/ptah_agent/compare/v1.1.3...v1.2.0) (2024-06-04)
+
+
+### Features
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) remove verbose mode from tar ([f0824f3](https://github.com/ptah-sh/ptah_agent/commit/f0824f371b5641d5ea1ffa7836e35eaab6a9282b))
+
 ## [1.1.3](https://github.com/ptah-sh/ptah_agent/compare/v1.1.2...v1.1.3) (2024-06-04)
 
 
