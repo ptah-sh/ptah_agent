@@ -15,6 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '26'
+          elixir-version: '1.16'
       - run: mix deps.get
       # TODO: add `mix test` when tests will be written. :)
       - run: MIX_ENV=prod mix release
@@ -34,6 +37,8 @@ jobs:
           token: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}
           release-type: elixir
       - uses: actions/download-artifact@v4
+        if: ${{ steps.release.outputs.release_created }}
         with:
           name: ptah_agent
       - run: gh release upload ${{ steps.release.outputs.tag_name }} ptah_agent.tar.xz
+        if: ${{ steps.release.outputs.release_created }}
