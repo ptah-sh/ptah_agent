@@ -21,11 +21,11 @@ jobs:
       - run: mix deps.get
       # TODO: add `mix test` when tests will be written. :)
       - run: MIX_ENV=prod mix release
-      - run: tar -cvJf ptah_agent.tar.xz -C _build/prod/rel ptah_agent
+      - run: tar -cvJf ptah_agent_linux_x86_64.tar.xz -C _build/prod/rel ptah_agent
       - uses: actions/upload-artifact@v4
         with:
           name: ptah_agent
-          path: ptah_agent.tar.xz
+          path: ptah_agent_linux_x86_64.tar.xz
 
   release-please:
     runs-on: ubuntu-latest
@@ -51,6 +51,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: ptah_agent
-      - run: gh release upload "${{ needs.release-please.outputs.tag_name }}" "ptah_agent.tar.xz#ptah_agent_${{ needs.release-please.outputs.tag_name }}_linux_x86_64.tar.xz"
+      - run: gh release upload "${{ needs.release-please.outputs.tag_name }}" "ptah_agent_linux_x86_64.tar.xz"
         env:
           GH_TOKEN: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}

@@ -37,7 +37,7 @@ defmodule PtahAgent.MixProject do
       # jason for tesla
       {:jason, ">= 1.0.0"},
       # ptah_proto for ptah. :)
-      {:ptah_proto, git: "https://gitlab.com/ptah-sh/ptah_proto.git", branch: "main"}
+      {:ptah_proto, git: "https://github.com/ptah-sh/ptah_proto.git", branch: "main"}
     ]
   end
 end

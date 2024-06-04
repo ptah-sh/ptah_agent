@@ -154,9 +154,13 @@ export XDG_RUNTIME_DIR="\$HOME/.cache/xdgr"
 
 BASHRC
 
-curl -L https://ess-gg-assets-bohdan-shulha.nyc3.digitaloceanspaces.com/ptah/ptah_agent_latest_linux_x86_64.tar.xz -o /tmp/ptah_agent_latest.tar.xz
+curl -L https://github.com/ptah-sh/ptah_agent/releases/latest/download/ptah_agent_linux_x86_64.tar.xz -o /tmp/ptah_agent_latest.tar.xz
 
-tar -xvJf /tmp/ptah_agent_latest.tar.xz -C \$HOME/
+mkdir -p \$HOME/ptah_agent/versions
+
+tar -xvJf /tmp/ptah_agent_latest.tar.xz -C \$HOME/ptah_agent/versions/0_seed/ptah_agent
+
+ln -sf \$HOME/ptah_agent/versions/0_seed/ptah_agent \$HOME/ptah_agent/current
 
 EOF
 
@@ -172,10 +176,11 @@ After=network.target
 [Service]
 User=$USER
 Group=$GROUP
+Environment=PTAH_HOME=/home/$USER
 Environment=PTAH_TOKEN=$PTAH_TOKEN
 Environment=PTAH_HOST=$PTAH_HOST
 Type=exec
-ExecStart=/home/$USER/ptah_agent/bin/ptah_agent start
+ExecStart=/home/$USER/ptah_agent/current/bin/ptah_agent start
 Restart=always
 RestartSteps=5
 RestartSec=5
@@ -190,7 +195,7 @@ if [ -z "$(which systemctl)" ]; then
     echo "Exiting an installation script with success, because systemctl not found."
     echo "Please add the following command to your init system manually:"
     echo ""
-    echo "    /home/$USER/ptah_agent/bin/ptah-agent start".
+    echo "    /home/$USER/ptah_agent/current/bin/ptah-agent start".
     echo ""
 
     exit 1

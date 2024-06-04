@@ -42,7 +42,7 @@ defmodule PtahClient do
     {:ok,
      push(socket, %Cmd.Join{
        token: socket.assigns[:token],
-       agent: %Cmd.Join.Agent{version: "0.0.0"},
+       agent: %Cmd.Join.Agent{version: "v#{Application.spec(:ptah_agent, :vsn)}"},
        mounts_root: socket.assigns[:mounts_root],
        docker: %Cmd.Join.Docker{
          platform: sys_info["Platform"]["Name"],
@@ -130,6 +130,56 @@ defmodule PtahClient do
     {:ok, _} = CaddyClient.post_load(payload.config)
 
     {:noreply, socket}
+  end
+
+  @impl PtahProto
+  def handle_packet(%Cmd.SelfUpgrade{} = payload, _socket) do
+    # TODO: trigger events on start/finish and send the action log.
+    # TODO: cleanup old versions. Amount of versions to keep should be configurable.
+
+    Logger.debug("Self upgrade to version #{payload.version} started.")
+
+    Logger.debug("Downloading version...")
+
+    {_, 0} =
+      System.cmd(
+        "curl",
+        [
+          "-sSL",
+          "https://github.com/ptah-sh/ptah_agent/releases/download/#{payload.version}/ptah_agent_linux_x86_64.tar.xz",
+          "-o",
+          "/tmp/ptah_agent_#{payload.version}.tar.xz"
+        ],
+        stderr_to_stdout: true
+      )
+
+    Logger.debug("Extracting version...")
+
+    home = Keyword.fetch!(Application.get_env(:ptah_agent, :ptah), :home)
+
+    target_dir = "#{home}/versions/#{payload.version}"
+
+    File.mkdir_p!(target_dir)
+
+    {_, 0} =
+      System.cmd(
+        "tar",
+        [
+          "-xvJf",
+          "/tmp/ptah_agent_#{payload.version}.tar.xz",
+          "-C",
+          target_dir
+        ],
+        stderr_to_stdout: true
+      )
+
+    Logger.debug("Linking version...")
+
+    {_, 0} = System.cmd("ln", ["-sf", target_dir, "#{home}/current"])
+
+    Logger.debug("Upgrade complete! Shutting down an app.")
+
+    System.stop(0)
   end
 
   def get_swarm() do
