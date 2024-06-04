@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7](https://github.com/ptah-sh/ptah_agent/compare/v1.0.6...v1.0.7) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) add version to the release artifact ([8b9bdc3](https://github.com/ptah-sh/ptah_agent/commit/8b9bdc3e150400084c4cfdabdc0843b038ef2a6b))
+
 ## [1.0.6](https://github.com/ptah-sh/ptah_agent/compare/v1.0.5...v1.0.6) (2024-06-04)
 
 
