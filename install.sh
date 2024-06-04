@@ -160,7 +160,7 @@ mkdir -p \$HOME/ptah_agent/versions/0_seed
 
 tar -xvJf /tmp/ptah_agent_latest.tar.xz -C \$HOME/ptah_agent/versions/0_seed
 
-ln -sf \$HOME/ptah_agent/versions/0_seed/ptah_agent \$HOME/ptah_agent/current
+ln -sf \$HOME/ptah_agent/versions/0_seed/ptah_agent/ \$HOME/ptah_agent/current/
 
 EOF
 
