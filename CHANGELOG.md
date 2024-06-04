@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/ptah-sh/ptah_agent/compare/v1.2.1...v1.2.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) ln args for directory symlink in install.sh ([509f4cc](https://github.com/ptah-sh/ptah_agent/commit/509f4ccab0feceee6bd948c9358dde5b9627ede1))
+
 ## [1.2.1](https://github.com/ptah-sh/ptah_agent/compare/v1.2.0...v1.2.1) (2024-06-04)
 
 
