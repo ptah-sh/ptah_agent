@@ -165,7 +165,7 @@ defmodule PtahClient do
       System.cmd(
         "tar",
         [
-          "-xvJf",
+          "-xJf",
           "/tmp/ptah_agent_#{payload.version}.tar.xz",
           "-C",
           target_dir
