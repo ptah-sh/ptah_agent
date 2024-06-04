@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-build-job:
+build:
   image: elixir:latest
   stage: build
   script:
