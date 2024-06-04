@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/ptah-sh/ptah_agent/compare/v1.0.0...v1.0.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) provide gh token ([bb06501](https://github.com/ptah-sh/ptah_agent/commit/bb06501a2a3bdcec26e63fde1f4ec6bb35cf43cd))
+
 ## 1.0.0 (2024-06-04)
 
 
