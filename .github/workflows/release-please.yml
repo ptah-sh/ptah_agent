@@ -10,13 +10,30 @@ permissions:
 name: release-please
 
 jobs:
-  release-please:
+  compile:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+      - run: mix deps.get
+      # TODO: add `mix test` when tests will be written. :)
+      - run: MIX_ENV=prod mix release
+      - run: tar -cvJf ptah_agent.tar.xz -C _build/prod/rel ptah_agent
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ptah_agent
+          path: ptah_agent.tar.xz
+
+  release-please:
+    runs-on: ubuntu-latest
+    needs: compile
+    steps:
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}
           release-type: elixir
+      - uses: actions/download-artifact@v4
+        with:
+          name: ptah_agent
+      - run: gh release upload ${{ steps.release.outputs.tag_name }} ptah_agent.tar.xz
