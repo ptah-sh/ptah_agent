@@ -24,7 +24,7 @@ jobs:
       - run: tar -cvJf ptah_agent.tar.xz -C _build/prod/rel ptah_agent
       - uses: actions/upload-artifact@v4
         with:
-          name: ptah_agent.tar.xz
+          name: ptah_agent
           path: ptah_agent.tar.xz
 
   release-please:
@@ -39,12 +39,12 @@ jobs:
       - uses: actions/download-artifact@v4
         if: ${{ steps.release.outputs.release_created }}
         with:
-          name: ptah_agent.tar.xz
+          name: ptah_agent
           path: ptah_agent.tar.xz
       # For some reason, required by `gh release upload`
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
-      - run: gh release upload ${{ steps.release.outputs.tag_name }} ptah_agent.tar.xz
+      - run: gh release upload "${{ steps.release.outputs.tag_name }}" "ptah_agent.tar.xz"
         if: ${{ steps.release.outputs.release_created }}
         env:
           GH_TOKEN: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}
