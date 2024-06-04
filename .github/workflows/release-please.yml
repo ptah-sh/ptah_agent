@@ -30,21 +30,26 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     needs: compile
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}
           release-type: elixir
+      - run: echo "release_created=${{ steps.release.outputs.release_created }}" >> "$GITHUB_OUTPUT"
+      - run: echo "tag_name=${{ steps.release.outputs.release_created }}" >> "$GITHUB_OUTPUT"
+
+  upload-release-artifact:
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    steps:
       - uses: actions/download-artifact@v4
-        if: ${{ steps.release.outputs.release_created }}
         with:
           name: ptah_agent
-          path: ptah_agent.tar.xz
-      # For some reason, required by `gh release upload`
-      - uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.release_created }}
-      - run: gh release upload "${{ steps.release.outputs.tag_name }}" "ptah_agent.tar.xz"
-        if: ${{ steps.release.outputs.release_created }}
+      - run: gh release upload "${{ needs.release-please.outputs.tag_name }}" "ptah_agent.tar.xz"
         env:
           GH_TOKEN: ${{ secrets.GH_RELEASE_PLEASE_TOKEN }}
