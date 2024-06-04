@@ -176,7 +176,7 @@ After=network.target
 [Service]
 User=$USER
 Group=$GROUP
-Environment=PTAH_HOME=/home/$USER
+Environment=PTAH_HOME=/home/$USER/ptah_agent
 Environment=PTAH_TOKEN=$PTAH_TOKEN
 Environment=PTAH_HOST=$PTAH_HOST
 Type=exec

@@ -175,7 +175,7 @@ defmodule PtahClient do
 
     Logger.debug("Linking version...")
 
-    {_, 0} = System.cmd("ln", ["-sf", target_dir, "#{home}/current"])
+    {_, 0} = System.cmd("ln", ["-sf", "#{target_dir}/ptah_agent", "#{home}/current"])
 
     Logger.debug("Upgrade complete! Shutting down an app.")
 
