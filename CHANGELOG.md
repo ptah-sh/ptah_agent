@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/ptah-sh/ptah_agent/compare/v1.1.1...v1.1.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) path typos 3 ([ed532db](https://github.com/ptah-sh/ptah_agent/commit/ed532db2b95d7cd6bac2cccaa920a5fed245e0b6))
+
 ## [1.1.1](https://github.com/ptah-sh/ptah_agent/compare/v1.1.0...v1.1.1) (2024-06-04)
 
 
