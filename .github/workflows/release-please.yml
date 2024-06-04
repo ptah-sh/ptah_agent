@@ -42,6 +42,7 @@ jobs:
           name: ptah_agent.tar.xz
       # For some reason, required by `gh release upload`
       - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.release_created }}
       - run: gh release upload ${{ steps.release.outputs.tag_name }} ptah_agent.tar.xz
         if: ${{ steps.release.outputs.release_created }}
         env:
