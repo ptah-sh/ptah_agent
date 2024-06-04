@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/ptah-sh/ptah_agent/compare/v1.0.3...v1.0.4) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) try fix artifact upload ([16b1487](https://github.com/ptah-sh/ptah_agent/commit/16b1487514ef9c29b51c300c3037f59bff9e2d0d))
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) try separate artifact upload ([50184a8](https://github.com/ptah-sh/ptah_agent/commit/50184a8f7de038e26b5fe0df5ddbdb5b021b6eb7))
+
 ## [1.0.3](https://github.com/ptah-sh/ptah_agent/compare/v1.0.2...v1.0.3) (2024-06-04)
 
 
