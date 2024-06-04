@@ -11,6 +11,10 @@ defmodule DockerClient.Services do
               ContainerSpec: %{
                 Image: spec.task_template.container_spec.image,
                 Hostname: spec.task_template.container_spec.hostname,
+                Env:
+                  Enum.map(spec.task_template.container_spec.env, fn env ->
+                    "#{env.name}=#{env.value}"
+                  end),
                 Mounts:
                   Enum.map(spec.task_template.container_spec.mounts, fn mount ->
                     %{

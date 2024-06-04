@@ -125,6 +125,13 @@ defmodule PtahClient do
     {:noreply, socket}
   end
 
+  @impl PtahProto
+  def handle_packet(%Cmd.LoadCaddyConfig{} = payload, socket) do
+    {:ok, _} = CaddyClient.post_load(payload.config)
+
+    {:noreply, socket}
+  end
+
   def get_swarm() do
     {:ok, info} = DockerClient.get_info()
 

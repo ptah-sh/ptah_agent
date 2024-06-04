@@ -11,6 +11,7 @@ defmodule PtahAgent.Application do
       # Starts a worker by calling: PtahAgent.Worker.start_link(arg)
       # {PtahAgent.Worker, arg}
       {DockerClient, Application.get_env(:ptah_agent, :docker)},
+      {CaddyClient, Application.get_env(:ptah_agent, :caddy)},
       {PtahClient, Application.get_env(:ptah_agent, :ptah)}
     ]
 
