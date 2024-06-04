@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/ptah-sh/ptah_agent/compare/v1.0.1...v1.0.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* [#5](https://github.com/ptah-sh/ptah_agent/issues/5) checkout only release created ([1d24097](https://github.com/ptah-sh/ptah_agent/commit/1d24097e094cb3b0692e99095d1b19561e8ae294))
+
 ## [1.0.1](https://github.com/ptah-sh/ptah_agent/compare/v1.0.0...v1.0.1) (2024-06-04)
 
 
