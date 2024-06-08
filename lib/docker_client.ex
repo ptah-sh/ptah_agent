@@ -1,6 +1,7 @@
 defmodule DockerClient do
   use GenServer
 
+  use DockerClient.Configs
   use DockerClient.Networks
   use DockerClient.Nodes
   use DockerClient.Services

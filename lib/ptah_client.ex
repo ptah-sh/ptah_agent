@@ -126,6 +126,20 @@ defmodule PtahClient do
   end
 
   @impl PtahProto
+  def handle_packet(%Cmd.CreateConfig{} = packet, socket) do
+    {:ok, body} = DockerClient.post_configs_create(packet)
+
+    push(socket, %Event.ConfigCreated{
+      config_id: packet.config_id,
+      docker: %{
+        config_id: body["ID"]
+      }
+    })
+
+    {:noreply, socket}
+  end
+
+  @impl PtahProto
   def handle_packet(%Cmd.UpdateService{} = packet, socket) do
     {:ok, docker_service} = DockerClient.get_services_id(packet.docker.service_id)
 
@@ -143,7 +157,9 @@ defmodule PtahClient do
 
   @impl PtahProto
   def handle_packet(%Cmd.LoadCaddyConfig{} = payload, socket) do
-    {:ok, _} = CaddyClient.post_load(payload.config)
+    if Kernel.map_size(payload.config["apps"]["http"]["servers"]) > 0 do
+      {:ok, _} = CaddyClient.post_load(payload.config)
+    end
 
     {:noreply, socket}
   end
