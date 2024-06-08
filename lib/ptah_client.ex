@@ -126,6 +126,22 @@ defmodule PtahClient do
   end
 
   @impl PtahProto
+  def handle_packet(%Cmd.UpdateService{} = packet, socket) do
+    {:ok, docker_service} = DockerClient.get_services_id(packet.docker.service_id)
+
+    service_version = docker_service["Version"]["Index"]
+
+    {:ok, _} =
+      DockerClient.post_services_id_update(
+        packet.docker.service_id,
+        service_version,
+        packet.service_spec
+      )
+
+    {:noreply, socket}
+  end
+
+  @impl PtahProto
   def handle_packet(%Cmd.LoadCaddyConfig{} = payload, socket) do
     {:ok, _} = CaddyClient.post_load(payload.config)
 
