@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/ptah-sh/ptah_agent/compare/v1.2.2...v1.3.0) (2024-06-08)
+
+
+### Features
+
+* [#24](https://github.com/ptah-sh/ptah_agent/issues/24) add update_service command ([b406aea](https://github.com/ptah-sh/ptah_agent/commit/b406aea8b4751353bbc5893c3cf7a1094b32e2a8))
+* [#26](https://github.com/ptah-sh/ptah_agent/issues/26) add config management ([f4b88d9](https://github.com/ptah-sh/ptah_agent/commit/f4b88d9bc294056617f8fba5542e843a8fa0cb31))
+
 ## [1.2.2](https://github.com/ptah-sh/ptah_agent/compare/v1.2.1...v1.2.2) (2024-06-04)
 
 
