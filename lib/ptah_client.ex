@@ -48,7 +48,19 @@ defmodule PtahClient do
          platform: sys_info["Platform"]["Name"],
          version: sys_info["Version"]
        },
-       swarm: swarm
+       swarm: swarm,
+       networks:
+         IfConfig.list_interfaces()
+         |> Enum.map(fn {name, addresses} ->
+           %Cmd.Join.Network{
+             name: name,
+             ips:
+               addresses
+               |> Enum.map(fn {version, ip} ->
+                 %Cmd.Join.Networks.IP{version: version, address: ip}
+               end)
+           }
+         end)
      })}
   end
 
