@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/ptah-sh/ptah_agent/compare/v1.5.0...v1.6.0) (2024-06-09)
+
+
+### Features
+
+* [#27](https://github.com/ptah-sh/ptah_agent/issues/27) support various spacing in ifconfig output ([6cd0518](https://github.com/ptah-sh/ptah_agent/commit/6cd0518350ca78a0eeea33f1f5376c52be518c47))
+
 ## [1.5.0](https://github.com/ptah-sh/ptah_agent/compare/v1.4.0...v1.5.0) (2024-06-09)
 
 
