@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/ptah-sh/ptah_agent/compare/v1.6.0...v1.7.0) (2024-06-09)
+
+
+### Features
+
+* [#27](https://github.com/ptah-sh/ptah_agent/issues/27) change default ptah swarm's root domain ([dc90721](https://github.com/ptah-sh/ptah_agent/commit/dc90721099a44cd2a8c936d0b5a05c024df727ec))
+
 ## [1.6.0](https://github.com/ptah-sh/ptah_agent/compare/v1.5.0...v1.6.0) (2024-06-09)
 
 
