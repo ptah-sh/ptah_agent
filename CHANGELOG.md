@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/ptah-sh/ptah_agent/compare/v1.7.0...v1.7.1) (2024-06-09)
+
+
+### Bug Fixes
+
+* [#27](https://github.com/ptah-sh/ptah_agent/issues/27) set the ptah_mounts_root env var ([891a0b1](https://github.com/ptah-sh/ptah_agent/commit/891a0b1921ff3c8e4d530511ae0de32e566b02a7))
+
 ## [1.7.0](https://github.com/ptah-sh/ptah_agent/compare/v1.6.0...v1.7.0) (2024-06-09)
 
 
