@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/ptah-sh/ptah_agent/compare/v1.3.0...v1.4.0) (2024-06-09)
+
+
+### Features
+
+* [#27](https://github.com/ptah-sh/ptah_agent/issues/27) collect and send available IP addresses to server ([2e74bdc](https://github.com/ptah-sh/ptah_agent/commit/2e74bdcc200bb2e9fc0b81b569c9ddd2b724bae8))
+
 ## [1.3.0](https://github.com/ptah-sh/ptah_agent/compare/v1.2.2...v1.3.0) (2024-06-08)
 
 
