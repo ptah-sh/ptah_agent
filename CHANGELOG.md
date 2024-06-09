@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/ptah-sh/ptah_agent/compare/v1.4.0...v1.5.0) (2024-06-09)
+
+
+### Features
+
+* [#27](https://github.com/ptah-sh/ptah_agent/issues/27) forward listen_addr and advertise_addr ([d187ac5](https://github.com/ptah-sh/ptah_agent/commit/d187ac5e058053fbe4cd2dda99e59504bdd3bbcd))
+
 ## [1.4.0](https://github.com/ptah-sh/ptah_agent/compare/v1.3.0...v1.4.0) (2024-06-09)
 
 
