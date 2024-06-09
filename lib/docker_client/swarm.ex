@@ -9,12 +9,13 @@ defmodule DockerClient.Swarm do
         })
       end
 
-      def post_swarm_init() do
+      def post_swarm_init(attrs) do
         GenServer.call(__MODULE__, %{
           method: "POST",
           url: "/swarm/init",
           body: %{
-            ListenAddr: "0.0.0.0:2375"
+            ListenAddr: attrs.listen_addr,
+            AdvertiseAddr: attrs.advertise_addr
           },
           status_map: %{}
         })

@@ -89,7 +89,7 @@ defmodule PtahClient do
   @impl PtahProto
   def handle_packet(%Cmd.CreateSwarm{} = packet, socket) do
     # FIXME: this is not a swarm_id, this is the complete description of the swarm.
-    {:ok, swarm_id} = DockerClient.post_swarm_init()
+    {:ok, swarm_id} = DockerClient.post_swarm_init(packet)
 
     {:ok, _} =
       DockerClient.post_networks_create(%{
