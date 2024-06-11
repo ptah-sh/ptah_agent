@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.5](https://github.com/ptah-sh/ptah_agent/compare/v1.8.4...v1.8.5) (2024-06-11)
+
+
+### Bug Fixes
+
+* [#37](https://github.com/ptah-sh/ptah_agent/issues/37) fix caddy empty body response parse ([af93d61](https://github.com/ptah-sh/ptah_agent/commit/af93d6142d6ade701aca89fd38a4fb998f050abc))
+
 ## [1.8.4](https://github.com/ptah-sh/ptah_agent/compare/v1.8.3...v1.8.4) (2024-06-11)
 
 
