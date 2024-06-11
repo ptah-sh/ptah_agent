@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/ptah-sh/ptah_agent/compare/v1.8.0...v1.8.1) (2024-06-11)
+
+
+### Bug Fixes
+
+* [#35](https://github.com/ptah-sh/ptah_agent/issues/35) remove subpath volume option ([1168eda](https://github.com/ptah-sh/ptah_agent/commit/1168eda448212e4a2a8b4d0092bccb676f2aa055))
+
 ## [1.8.0](https://github.com/ptah-sh/ptah_agent/compare/v1.7.1...v1.8.0) (2024-06-11)
 
 
