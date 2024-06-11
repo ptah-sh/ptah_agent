@@ -3,7 +3,7 @@ defmodule DockerClient.Services do
     quote do
       def post_services_create(spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/services/create",
           body: DockerClient.Services.map_spec(spec),
           status_map: %{}
@@ -12,7 +12,7 @@ defmodule DockerClient.Services do
 
       def post_services_id_update(id, version, spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/services/#{id}/update?version=#{version}",
           body: DockerClient.Services.map_spec(spec),
           status_map: %{}
@@ -21,7 +21,7 @@ defmodule DockerClient.Services do
 
       def get_services_id(id) do
         GenServer.call(__MODULE__, %{
-          method: "GET",
+          method: :get,
           url: "/services/#{id}",
           status_map: %{}
         })
@@ -46,8 +46,8 @@ defmodule DockerClient.Services do
                 Target: mount.target,
                 Source: mount.source,
                 Type: mount.type,
-                BindOptions: %{
-                  CreateMountpoint: mount.bind_options.create_mountpoint
+                VolumeOptions: %{
+                  Subpath: mount.volume_options.subpath
                 }
               }
             end)

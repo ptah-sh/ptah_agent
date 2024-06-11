@@ -3,7 +3,7 @@ defmodule DockerClient.Configs do
     quote do
       def post_configs_create(spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/configs/create",
           body: %{
             Name: spec.name,
@@ -16,7 +16,7 @@ defmodule DockerClient.Configs do
       def get_configs_id(id) do
         {:ok, config} =
           GenServer.call(__MODULE__, %{
-            method: "GET",
+            method: :get,
             url: "/configs/#{id}",
             status_map: %{
               404 => :not_found

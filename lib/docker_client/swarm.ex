@@ -3,7 +3,7 @@ defmodule DockerClient.Swarm do
     quote do
       def get_swarm() do
         GenServer.call(__MODULE__, %{
-          method: "GET",
+          method: :get,
           url: "/swarm",
           status_map: %{503 => :not_swarm_node}
         })
@@ -11,7 +11,7 @@ defmodule DockerClient.Swarm do
 
       def post_swarm_init(attrs) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/swarm/init",
           body: %{
             ListenAddr: attrs.listen_addr,

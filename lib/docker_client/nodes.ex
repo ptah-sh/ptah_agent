@@ -3,7 +3,7 @@ defmodule DockerClient.Nodes do
     quote do
       def get_nodes_id(id) do
         GenServer.call(__MODULE__, %{
-          method: "GET",
+          method: :get,
           url: "/nodes/#{id}",
           status_map: %{}
         })
@@ -11,7 +11,7 @@ defmodule DockerClient.Nodes do
 
       def post_nodes_id_update(id, node_version, spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/nodes/#{id}/update?version=#{node_version}",
           body: %{
             Labels: spec.labels

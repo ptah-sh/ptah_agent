@@ -14,54 +14,42 @@ defmodule CaddyClient do
   def init(init_args) do
     host = Keyword.fetch!(init_args, :host)
 
-    Logger.debug("Connecting to #{host}")
+    Logger.debug("Caddy host: #{host}")
 
-    {:ok, client(host)}
+    {:ok, %{host: host}}
   end
 
-  def client(_host) do
-    middleware = [
-      # {Tesla.Middleware.BaseUrl, host},
-      Tesla.Middleware.JSON
-    ]
+  @impl true
+  def handle_call(%{method: method} = request, _from, state) do
+    Logger.debug("CADDY REQUEST: #{inspect(request)}")
 
-    Tesla.client(
-      middleware,
-      Tesla.Adapter.Hackney
+    req =
+      Finch.build(
+        method,
+        "#{state.host}#{request.url}",
+        # Headers
+        [{"content-type", "application/json"}, {"accept", "application/json"}],
+        # Body
+        if Map.has_key?(request, :body) do
+          request.body |> Jason.encode!()
+        else
+          nil
+        end
+        )
+
+
+    {:ok, response} = req |> Finch.request(:Finch)
+
+    Logger.debug(
+      "CADDY RESPONSE: status: #{inspect(response.status)}, body: #{inspect(response.body)}"
     )
-  end
 
-  @impl true
-  def handle_call(%{method: "GET"} = request, _from, state) do
-    Logger.debug("CADDY REQUEST: #{inspect(request)}")
-
-    {:ok, %{status: status, body: body}} =
-      Tesla.get(state, "http://localhost:2019#{request.url}")
-
-    Logger.debug("CADDY RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
+    data = response.body |> Jason.decode!()
 
     result =
-      case status do
-        200 -> {:ok, body}
-        other -> {:error, map_status_to_error(other, request), body}
-      end
-
-    {:reply, result, state}
-  end
-
-  @impl true
-  def handle_call(%{method: "POST"} = request, _from, state) do
-    Logger.debug("CADDY REQUEST: #{inspect(request)}")
-
-    {:ok, %{status: status, body: body}} =
-      Tesla.post(state, "http://localhost:2019#{request.url}", request.body)
-
-    Logger.debug("CADDY RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
-
-    result =
-      case status do
-        _ when status in [200, 201] -> {:ok, body}
-        other -> {:error, map_status_to_error(other, request), body}
+      case response.status do
+        _ when response.status in [200, 201] -> {:ok, data}
+        other -> {:error, map_status_to_error(other, request), data}
       end
 
     {:reply, result, state}

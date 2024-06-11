@@ -3,7 +3,7 @@ defmodule CaddyClient.Load do
     quote do
       def post_load(spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/load",
           body: spec,
           status_map: %{}

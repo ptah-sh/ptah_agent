@@ -2,6 +2,7 @@ defmodule DockerClient do
   use GenServer
 
   use DockerClient.Configs
+  use DockerClient.Images
   use DockerClient.Networks
   use DockerClient.Nodes
   use DockerClient.Services
@@ -17,59 +18,66 @@ defmodule DockerClient do
   @impl true
   def init(init_args) do
     host = Keyword.fetch!(init_args, :host)
+    # unix_socket = Keyword.fetch!(init_args, :unix_socket)
 
     Logger.debug("Connecting to #{host}")
 
-    {:ok, client(host)}
-  end
-
-  def client(_host) do
-    middleware = [
-      # {Tesla.Middleware.BaseUrl, host},
-      Tesla.Middleware.JSON
-    ]
-
-    Tesla.client(
-      middleware,
-      Tesla.Adapter.Hackney
-    )
+    {:ok, %{}}
   end
 
   @impl true
-  def handle_call(%{method: "GET"} = request, _from, state) do
-    socket_path = URI.encode_www_form("/var/run/docker.sock")
+  def handle_call(%{method: method} = request, _from, state) do
+    # socket_path = URI.encode_www_form("/var/run/docker.sock")
 
     Logger.debug("DOCKER REQUEST: #{inspect(request)}")
 
-    {:ok, %{status: status, body: body}} =
-      Tesla.get(state, "http+unix://#{socket_path}#{request.url}")
+    req =
+      Finch.build(
+        method,
+        "http://localhost:2375#{request.url}",
+        # Headers
+        [{"content-type", "application/json"}, {"accept", "application/json"}],
+        # Body
+        if Map.has_key?(request, :body) do
+          request.body |> Jason.encode!()
+        else
+          nil
+        end,
+        unix_socket: "/var/run/docker.sock"
+      )
 
-    Logger.debug("DOCKER RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
+    # {:ok, data} =
+    #   if Map.has_key?(request, :stream) and request.stream do
+    #     req
+    #     |> Finch.stream_while(:Finch, nil, fn kv, _acc ->
+    #       Logger.emergency("DOCKER RESPONSE: #{inspect(kv)}")
 
-    result =
-      case status do
-        200 -> {:ok, body}
-        other -> {:error, map_status_to_error(other, request), body}
+    #       {:cont, kv}
+    #     end)
+    #   else
+    #     req |> Finch.request(:Finch)
+    #   end
+
+    {:ok, response} = req |> Finch.request(:Finch)
+
+    Logger.debug(
+      "DOCKER RESPONSE: status: #{inspect(response.status)}, body: #{inspect(response.body)}"
+    )
+
+    data =
+      if Map.has_key?(request, :stream) and request.stream do
+        response.body
+        |> String.split("\r\n")
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.map(&Jason.decode!/1)
+      else
+        response.body |> Jason.decode!()
       end
 
-    {:reply, result, state}
-  end
-
-  @impl true
-  def handle_call(%{method: "POST"} = request, _from, state) do
-    socket_path = URI.encode_www_form("/var/run/docker.sock")
-
-    Logger.debug("DOCKER REQUEST: #{inspect(request)}")
-
-    {:ok, %{status: status, body: body}} =
-      Tesla.post(state, "http+unix://#{socket_path}#{request.url}", request.body)
-
-    Logger.debug("DOCKER RESPONSE: status: #{inspect(status)}, body: #{inspect(body)}")
-
     result =
-      case status do
-        _ when status in [200, 201] -> {:ok, body}
-        other -> {:error, map_status_to_error(other, request), body}
+      case response.status do
+        _ when response.status in [200, 201] -> {:ok, data}
+        other -> {:error, map_status_to_error(other, request), data}
       end
 
     {:reply, result, state}

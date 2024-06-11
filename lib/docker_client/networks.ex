@@ -3,7 +3,7 @@ defmodule DockerClient.Networks do
     quote do
       def post_networks_create(spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/networks/create",
           body: %{
             Name: spec.name,

@@ -12,7 +12,23 @@ defmodule PtahAgent.Application do
       # {PtahAgent.Worker, arg}
       {DockerClient, Application.get_env(:ptah_agent, :docker)},
       {CaddyClient, Application.get_env(:ptah_agent, :caddy)},
-      {PtahClient, Application.get_env(:ptah_agent, :ptah)}
+      {PtahClient, Application.get_env(:ptah_agent, :ptah)},
+      {
+        Finch,
+        name: :Finch,
+        pools: %{
+          {:http, {:local, "/var/run/docker.sock"}} => [
+            size: 5,
+            count: 2
+          ]
+        }
+        # pools: %{
+        #   default: [
+        #     size: 5,
+        #     conn_opts: [transport: :unix_socket]
+        #   ]
+        # }
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

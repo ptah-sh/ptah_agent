@@ -177,7 +177,6 @@ After=network.target
 User=$USER
 Group=$GROUP
 Environment=PTAH_HOME=/home/$USER/ptah_agent
-Environment=PTAH_MOUNTS_ROOT=/home/$USER/ptah_agent/mounts
 Environment=PTAH_TOKEN=$PTAH_TOKEN
 Environment=PTAH_HOST=$PTAH_HOST
 Type=exec

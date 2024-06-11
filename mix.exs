@@ -16,8 +16,7 @@ defmodule PtahAgent.MixProject do
     [
       extra_applications: [
         :logger,
-        # Added :hackney to test the docker connection. Remove if not needed
-        :hackney
+        :finch
       ],
       mod: {PtahAgent.Application, []}
     ]
@@ -30,11 +29,7 @@ defmodule PtahAgent.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       # slipstream for phoenix channel connections
       {:slipstream, "~> 1.1"},
-      # tesla for http requests
-      {:tesla, "~> 1.4"},
-      # hackney for tesla
-      {:hackney, "~> 1.17"},
-      # jason for tesla
+      {:finch, "~> 0.18.0"},
       {:jason, ">= 1.0.0"},
       # ptah_proto for ptah. :)
       {:ptah_proto, git: "https://github.com/ptah-sh/ptah_proto.git", branch: "main"}

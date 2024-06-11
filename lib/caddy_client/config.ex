@@ -3,7 +3,7 @@ defmodule CaddyClient.Config do
     quote do
       def get_config(path) do
         GenServer.call(__MODULE__, %{
-          method: "GET",
+          method: :get,
           url: "/config/#{path}",
           status_map: %{}
         })
@@ -11,7 +11,7 @@ defmodule CaddyClient.Config do
 
       def post_config(path, spec) do
         GenServer.call(__MODULE__, %{
-          method: "POST",
+          method: :post,
           url: "/config/#{path}",
           body: spec,
           status_map: %{}
