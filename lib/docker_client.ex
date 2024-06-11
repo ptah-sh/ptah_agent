@@ -71,7 +71,11 @@ defmodule DockerClient do
         |> Enum.reject(&(&1 == ""))
         |> Enum.map(&Jason.decode!/1)
       else
-        response.body |> Jason.decode!()
+        if response.body == "" do
+          %{}
+        else
+          response.body |> Jason.decode!()
+        end
       end
 
     result =
