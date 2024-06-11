@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/ptah-sh/ptah_agent/compare/v1.8.3...v1.8.4) (2024-06-11)
+
+
+### Bug Fixes
+
+* [#37](https://github.com/ptah-sh/ptah_agent/issues/37) fix CADDY_HOST variable 3 ([f2c0fcf](https://github.com/ptah-sh/ptah_agent/commit/f2c0fcfd83521e522cd8d53fa9fa141b42c5f168))
+
 ## [1.8.3](https://github.com/ptah-sh/ptah_agent/compare/v1.8.2...v1.8.3) (2024-06-11)
 
 
