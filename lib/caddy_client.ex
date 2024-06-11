@@ -43,7 +43,12 @@ defmodule CaddyClient do
       "CADDY RESPONSE: status: #{inspect(response.status)}, body: #{inspect(response.body)}"
     )
 
-    data = response.body |> Jason.decode!()
+    data =
+      if response.body == "" do
+        nil
+      else
+        response.body |> Jason.decode!()
+      end
 
     result =
       case response.status do
