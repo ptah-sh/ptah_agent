@@ -45,10 +45,7 @@ defmodule DockerClient.Services do
               %{
                 Target: mount.target,
                 Source: mount.source,
-                Type: mount.type,
-                VolumeOptions: %{
-                  Subpath: mount.volume_options.subpath
-                }
+                Type: mount.type
               }
             end)
         },
