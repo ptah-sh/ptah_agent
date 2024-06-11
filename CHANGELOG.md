@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/ptah-sh/ptah_agent/compare/v1.7.1...v1.8.0) (2024-06-11)
+
+
+### Features
+
+* [#33](https://github.com/ptah-sh/ptah_agent/issues/33) replace Tesla with Finch ([8bf0dff](https://github.com/ptah-sh/ptah_agent/commit/8bf0dffa7a1173f5508af562cd91b1c5b6f55332))
+
 ## [1.7.1](https://github.com/ptah-sh/ptah_agent/compare/v1.7.0...v1.7.1) (2024-06-09)
 
 
