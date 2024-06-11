@@ -12,7 +12,7 @@ defmodule CaddyClient do
 
   @impl true
   def init(init_args) do
-    host = Keyword.fetch!(init_args, :host)
+    host = Keyword.fetch!(init_args, :admin_host)
 
     Logger.debug("Caddy host: #{host}")
 
@@ -35,8 +35,7 @@ defmodule CaddyClient do
         else
           nil
         end
-        )
-
+      )
 
     {:ok, response} = req |> Finch.request(:Finch)
 
