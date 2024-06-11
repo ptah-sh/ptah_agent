@@ -19,7 +19,7 @@ defmodule PtahClient do
     host = Keyword.fetch!(init_args, :host)
     token = Keyword.fetch!(init_args, :token)
 
-    Logger.debug("Connecting to #{host}.")
+    Logger.debug("Ptah Server host: #{host}")
 
     {:ok, assign(connect!(uri: host), token: token), {:continue, :start_ping}}
   end

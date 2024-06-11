@@ -20,7 +20,7 @@ defmodule DockerClient do
     host = Keyword.fetch!(init_args, :host)
     # unix_socket = Keyword.fetch!(init_args, :unix_socket)
 
-    Logger.debug("Connecting to #{host}")
+    Logger.debug("Docker host: #{host}")
 
     {:ok, %{}}
   end

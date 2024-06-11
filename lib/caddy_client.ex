@@ -12,7 +12,7 @@ defmodule CaddyClient do
 
   @impl true
   def init(init_args) do
-    host = Keyword.fetch!(init_args, :admin_host)
+    host = Keyword.fetch!(init_args, :host)
 
     Logger.debug("Caddy host: #{host}")
 
