@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/ptah-sh/ptah_agent/compare/v1.8.6...v1.9.0) (2024-06-12)
+
+
+### Features
+
+* [#43](https://github.com/ptah-sh/ptah_agent/issues/43) support service create and delete commands ([43f4197](https://github.com/ptah-sh/ptah_agent/commit/43f4197ac1d646e47ec3766c1daa99f4e851b9e4))
+
 ## [1.8.6](https://github.com/ptah-sh/ptah_agent/compare/v1.8.5...v1.8.6) (2024-06-11)
 
 
