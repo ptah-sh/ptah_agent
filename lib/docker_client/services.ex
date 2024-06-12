@@ -26,6 +26,14 @@ defmodule DockerClient.Services do
           status_map: %{}
         })
       end
+
+      def delete_services_id(id) do
+        GenServer.call(__MODULE__, %{
+          method: :delete,
+          url: "/services/#{id}",
+          status_map: %{}
+        })
+      end
     end
   end
 

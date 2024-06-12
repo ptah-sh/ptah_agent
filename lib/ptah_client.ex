@@ -113,17 +113,15 @@ defmodule PtahClient do
   end
 
   @impl PtahProto
-  def handle_packet(%Cmd.CreateStack{} = packet, socket) do
-    for service <- packet.services do
-      {:ok, body} = DockerClient.post_services_create(service.service_spec)
+  def handle_packet(%Cmd.CreateService{} = packet, socket) do
+    {:ok, body} = DockerClient.post_services_create(packet.service_spec)
 
-      push(socket, %Event.ServiceCreated{
-        service_id: service.service_id,
-        docker: %{
-          service_id: body["ID"]
-        }
-      })
-    end
+    push(socket, %Event.ServiceCreated{
+      service_id: packet.service_id,
+      docker: %{
+        service_id: body["ID"]
+      }
+    })
 
     {:noreply, socket}
   end
@@ -154,6 +152,21 @@ defmodule PtahClient do
         service_version,
         packet.service_spec
       )
+
+    push(socket, %Event.ServiceUpdated{
+      service_id: packet.service_id
+    })
+
+    {:noreply, socket}
+  end
+
+  @impl PtahProto
+  def handle_packet(%Cmd.DeleteService{} = packet, socket) do
+    {:ok, _} = DockerClient.delete_services_id(packet.docker.service_id)
+
+    push(socket, %Event.ServiceDeleted{
+      service_id: packet.service_id
+    })
 
     {:noreply, socket}
   end
