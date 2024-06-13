@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/ptah-sh/ptah_agent/compare/v1.9.0...v1.10.0) (2024-06-13)
+
+
+### Features
+
+* [#45](https://github.com/ptah-sh/ptah_agent/issues/45) add support for private docker registries ([0055949](https://github.com/ptah-sh/ptah_agent/commit/00559490c721f28cb31ba570855f8f26199ad55c))
+
 ## [1.9.0](https://github.com/ptah-sh/ptah_agent/compare/v1.8.6...v1.9.0) (2024-06-12)
 
 
