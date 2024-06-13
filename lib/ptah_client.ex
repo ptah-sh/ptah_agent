@@ -114,7 +114,9 @@ defmodule PtahClient do
 
   @impl PtahProto
   def handle_packet(%Cmd.CreateService{} = packet, socket) do
-    {:ok, body} = DockerClient.post_services_create(packet.service_spec)
+    auth_config = get_docker_auth(packet.docker.auth_config_id)
+
+    {:ok, body} = DockerClient.post_services_create(auth_config, packet.service_spec)
 
     push(socket, %Event.ServiceCreated{
       service_id: packet.service_id,
@@ -142,12 +144,15 @@ defmodule PtahClient do
 
   @impl PtahProto
   def handle_packet(%Cmd.UpdateService{} = packet, socket) do
+    auth_config = get_docker_auth(packet.docker.auth_config_id)
+
     {:ok, docker_service} = DockerClient.get_services_id(packet.docker.service_id)
 
     service_version = docker_service["Version"]["Index"]
 
     {:ok, _} =
       DockerClient.post_services_id_update(
+        auth_config,
         packet.docker.service_id,
         service_version,
         packet.service_spec
@@ -243,6 +248,16 @@ defmodule PtahClient do
 
       _ ->
         {:ok, nil}
+    end
+  end
+
+  defp get_docker_auth(config_id) do
+    if config_id do
+      {:ok, config} = DockerClient.get_configs_id(config_id)
+
+      [{"x-registry-auth", Base.encode64(Jason.encode!(config["Spec"]["Data"]))}]
+    else
+      []
     end
   end
 end

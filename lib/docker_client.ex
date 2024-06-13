@@ -25,18 +25,26 @@ defmodule DockerClient do
     {:ok, %{}}
   end
 
+  # TODO: accept and enhance the request built by Finch.build instead of a custom struct?
   @impl true
   def handle_call(%{method: method} = request, _from, state) do
     # socket_path = URI.encode_www_form("/var/run/docker.sock")
 
     Logger.debug("DOCKER REQUEST: #{inspect(request)}")
 
+    headers =
+      if Map.has_key?(request, :headers) do
+        request.headers
+      else
+        []
+      end
+
     req =
       Finch.build(
         method,
         "http://localhost:2375#{request.url}",
         # Headers
-        [{"content-type", "application/json"}, {"accept", "application/json"}],
+        [{"content-type", "application/json"}, {"accept", "application/json"}] ++ headers,
         # Body
         if Map.has_key?(request, :body) do
           request.body |> Jason.encode!()

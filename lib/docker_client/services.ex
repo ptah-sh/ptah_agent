@@ -1,19 +1,21 @@
 defmodule DockerClient.Services do
   defp endpoints do
     quote do
-      def post_services_create(spec) do
+      def post_services_create(docker_auth, spec) do
         GenServer.call(__MODULE__, %{
           method: :post,
           url: "/services/create",
+          headers: docker_auth,
           body: DockerClient.Services.map_spec(spec),
           status_map: %{}
         })
       end
 
-      def post_services_id_update(id, version, spec) do
+      def post_services_id_update(docker_auth, id, version, spec) do
         GenServer.call(__MODULE__, %{
           method: :post,
           url: "/services/#{id}/update?version=#{version}",
+          headers: docker_auth,
           body: DockerClient.Services.map_spec(spec),
           status_map: %{}
         })
